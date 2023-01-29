@@ -34,6 +34,8 @@ namespace GarageCooperative.Controllers
             }
 
             var user = await _context.Users
+                .Include(x => x.UserRoles)
+                .ThenInclude(x => x.Role)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
