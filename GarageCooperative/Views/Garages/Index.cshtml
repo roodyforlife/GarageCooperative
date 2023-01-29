@@ -6,6 +6,42 @@
 
 <h1>Index</h1>
 
+<form asp-action="Index" method="post">
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Garage number</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.GarageNumber" name="garageNumber" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Row number</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.RowNumber" name="rowNumber" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Type</span>
+        </div>
+        <select name="typeId" class="form-control" aria-label="Default" aria-describedby="inputGroup-sizing-default" asp-items="ViewBag.TypeId"></select>
+    </div>
+
+    <div class="input-group mb-3">
+        <div class="input-group-prepend">
+            <span class="input-group-text" id="inputGroup-sizing-default">Garage space from</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.GarageSpaceFrom" name="garageSpaceFrom" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Garage space to</span>
+        </div>
+        <input type="number" class="form-control" aria-label="Default" value="@ViewBag.GarageSpaceTo" name="garageSpaceTo" aria-describedby="inputGroup-sizing-default">
+        <div class="input-group-prepend ml-3">
+            <span class="input-group-text" id="inputGroup-sizing-default">Sorting</span>
+        </div>
+        <select class="custom-select" name="sort" id="inputGroupSelect01" asp-items="@ViewBag.Sort"></select>
+    </div>
+
+    <div class="input-group mb-3">
+        <input type="submit" value="Search" class="btn btn-primary" />
+    </div>
+</form>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

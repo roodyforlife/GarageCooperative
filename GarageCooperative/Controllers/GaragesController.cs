@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GarageCooperative.DataBase;
 using GarageCooperative.Models;
+using GarageCooperative.Enums;
 
 namespace GarageCooperative.Controllers
 {
@@ -20,9 +21,82 @@ namespace GarageCooperative.Controllers
         }
 
         // GET: Garages
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int garageNumber, int rowNumber, int typeId, int garageSpaceFrom, int garageSpaceTo, 
+            GarageSort sort = GarageSort.NumberAsc)
         {
-            var dataBaseContext = _context.Garages.Include(g => g.Row).Include(g => g.Type);
+            IQueryable<Garage> dataBaseContext = _context.Garages.Include(g => g.Row).Include(g => g.Type);
+
+            if (garageNumber != 0)
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.Number == garageNumber);
+            }
+
+            if (rowNumber != 0)
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.Row.RowNumber == rowNumber);
+            }
+
+            if (typeId != 0)
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.Type.TypeId == typeId);
+            }
+
+            dataBaseContext = dataBaseContext.Where(x => x.GarageSpace >= garageSpaceFrom);
+            if (garageSpaceTo != 0)
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.GarageSpace <= garageSpaceTo);
+            }
+
+            switch (sort)
+            {
+                case GarageSort.NumberDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Number);
+                    break;
+                case GarageSort.GarageSpaceAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.GarageSpace);
+                    break;
+                case GarageSort.GarageSpaceDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.GarageSpace);
+                    break;
+                case GarageSort.RowNumberAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Row.RowNumber);
+                    break;
+                case GarageSort.RowNumberDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Row.RowNumber);
+                    break;
+                case GarageSort.TypeNameAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Type.Name);
+                    break;
+                case GarageSort.TypeNameDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Type.Name);
+                    break;
+                default:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Number);
+                    break;
+            }
+
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(GarageSort)).Cast<GarageSort>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.ToString(),
+                   Value = x.ToString(),
+                   Selected = (x == sort)
+               }).ToList();
+
+            List<SelectListItem> types = new List<SelectListItem>();
+            types.Add(new SelectListItem() { Text = "Select type", Value = "0" });
+            foreach(GarageCooperative.Models.Type type in _context.Types.ToList())
+            {
+                types.Add(new SelectListItem() { Value = type.TypeId.ToString(), Text = type.Name });
+            }
+
+            ViewData["TypeId"] = new SelectList(types, "Value", "Text", typeId);
+            ViewBag.GarageNumber = garageNumber;
+            ViewBag.RowNumber = rowNumber;
+            ViewBag.GarageSpaceFrom = garageSpaceFrom;
+            ViewBag.GarageSpaceTo = garageSpaceTo;
+
+
             return View(await dataBaseContext.ToListAsync());
         }
 
