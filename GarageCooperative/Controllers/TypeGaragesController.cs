@@ -49,8 +49,8 @@ namespace GarageCooperative.Controllers
         // GET: TypeGarages/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId");
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "TypeId");
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "TypeId", typeGarage.TypeId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
             return View(typeGarage);
         }
 
@@ -85,8 +85,8 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "TypeId", typeGarage.TypeId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
             return View(typeGarage);
         }
 
@@ -122,8 +122,8 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "TypeId", typeGarage.TypeId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
             return View(typeGarage);
         }
 

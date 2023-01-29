@@ -49,8 +49,8 @@ namespace GarageCooperative.Controllers
         // GET: Memberships/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", membership.GarageId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", membership.UserId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }
 
@@ -85,8 +85,8 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", membership.GarageId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", membership.UserId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }
 
@@ -122,8 +122,8 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", membership.GarageId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", membership.UserId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }
 

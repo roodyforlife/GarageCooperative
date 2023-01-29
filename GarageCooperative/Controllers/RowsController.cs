@@ -48,7 +48,7 @@ namespace GarageCooperative.Controllers
         // GET: Rows/Create
         public IActionResult Create()
         {
-            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "CooperativeId");
+            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "Name");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "CooperativeId", row.CooperativeId);
+            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "Name", row.CooperativeId);
             return View(row);
         }
 
@@ -82,7 +82,7 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "CooperativeId", row.CooperativeId);
+            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "Name", row.CooperativeId);
             return View(row);
         }
 
@@ -118,7 +118,7 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "CooperativeId", row.CooperativeId);
+            ViewData["CooperativeId"] = new SelectList(_context.Cooperatives, "CooperativeId", "Name", row.CooperativeId);
             return View(row);
         }
 

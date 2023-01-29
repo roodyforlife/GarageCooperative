@@ -49,8 +49,8 @@ namespace GarageCooperative.Controllers
         // GET: UserRoles/Create
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId");
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone");
             return View();
         }
 
@@ -67,8 +67,8 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", userRole.UserId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
             return View(userRole);
         }
 
@@ -85,8 +85,8 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", userRole.UserId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
             return View(userRole);
         }
 
@@ -122,8 +122,8 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "RoleId", userRole.RoleId);
-            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "UserId", userRole.UserId);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
             return View(userRole);
         }
 

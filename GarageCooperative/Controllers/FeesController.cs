@@ -48,7 +48,7 @@ namespace GarageCooperative.Controllers
         // GET: Fees/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId");
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", fee.GarageId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
             return View(fee);
         }
 
@@ -82,7 +82,7 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", fee.GarageId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
             return View(fee);
         }
 
@@ -118,7 +118,7 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "GarageId", fee.GarageId);
+            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
             return View(fee);
         }
 
