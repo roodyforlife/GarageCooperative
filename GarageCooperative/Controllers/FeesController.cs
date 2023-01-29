@@ -59,6 +59,7 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("FeeId,GarageId,Date,Payment")] Fee fee)
         {
+            fee.Date = DateTime.Now;
             if (ModelState.IsValid)
             {
                 _context.Add(fee);
