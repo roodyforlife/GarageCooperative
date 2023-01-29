@@ -59,9 +59,22 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RowId,RowNumber,MaxGarageCount,CooperativeId")] Row row)
         {
+            if(await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber) is not null)
+            {
+                ModelState.AddModelError("RowNumber", "Row number is already in the database");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(row);
+                await _context.SaveChangesAsync();
+                List<Garage> garages = new List<Garage>();
+                for (int i = 1; i <= row.MaxGarageCount; i++)
+                {
+                    garages.Add(new Garage() { Number = i, Row = await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber) });
+                }
+
+                await _context.Garages.AddRangeAsync(garages);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
