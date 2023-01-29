@@ -49,7 +49,18 @@ namespace GarageCooperative.Controllers
         // GET: Memberships/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text");
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone");
             return View();
         }
@@ -61,13 +72,40 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MembershipId,GarageId,UserId,OwnStart,OwnEnd")] Membership membership)
         {
+            Membership DbMembership = await _context.Memberships.FirstOrDefaultAsync(x => x.GarageId == membership.GarageId);
+            if (DbMembership is not null)
+            {
+                if (DbMembership.OwnEnd.Value.Year == 1 || DbMembership.OwnEnd >= DateTime.Now)
+                {
+                    ModelState.AddModelError("GarageId", "You can't add owner for this garage");
+                }
+            }
+
+            if (membership.OwnEnd is null)
+            {
+                membership.OwnEnd = new DateTime();
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(membership);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
+            
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", membership.GarageId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }
@@ -85,7 +123,19 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", membership.GarageId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }
@@ -122,7 +172,19 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", membership.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", membership.GarageId);
             ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", membership.UserId);
             return View(membership);
         }

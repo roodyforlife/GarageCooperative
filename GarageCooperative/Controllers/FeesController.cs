@@ -48,7 +48,18 @@ namespace GarageCooperative.Controllers
         // GET: Fees/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text");
             return View();
         }
 
@@ -66,7 +77,19 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", fee.GarageId);
             return View(fee);
         }
 
@@ -83,7 +106,19 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", fee.GarageId);
             return View(fee);
         }
 
@@ -119,7 +154,19 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", fee.GarageId);
+
+            var garages = _context.Garages.Include(x => x.Row).ToList();
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Garage garage in garages)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = garage.GarageId.ToString(),
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                });
+            }
+
+            ViewData["GarageId"] = new SelectList(selectListItems, "Value", "Text", fee.GarageId);
             return View(fee);
         }
 

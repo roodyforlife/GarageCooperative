@@ -15,6 +15,6 @@ namespace GarageCooperative.Models
         public int UserId { get; set; }
         [Required(ErrorMessage = "Should be not required")]
         public DateTime OwnStart { get; set; }
-        public DateTime OwnEnd { get; set; }
+        public Nullable<DateTime> OwnEnd { get; set; }
     }
 }
