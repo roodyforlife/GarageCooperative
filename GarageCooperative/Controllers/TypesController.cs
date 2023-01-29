@@ -56,6 +56,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("TypeId,Name,Cost,GarbadgeCost,WaterCost,FloorNumber")] GarageCooperative.Models.Type @type)
         {
+            if (await _context.Types.FirstOrDefaultAsync(x => x.Name == type.Name) is not null)
+            {
+                ModelState.AddModelError("Name", "Type already taken");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(@type);
@@ -91,6 +96,11 @@ namespace GarageCooperative.Controllers
             if (id != @type.TypeId)
             {
                 return NotFound();
+            }
+
+            if (await _context.Types.FirstOrDefaultAsync(x => x.Name == type.Name && x.TypeId != type.TypeId) is not null)
+            {
+                ModelState.AddModelError("Name", "Type already taken");
             }
 
             if (ModelState.IsValid)

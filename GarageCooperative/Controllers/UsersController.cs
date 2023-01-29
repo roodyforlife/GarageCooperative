@@ -56,6 +56,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserId,Name,Surname,Lastname,Telephone,Email,PassportNumber,Address,Salary")] User user)
         {
+            if (await _context.Users.FirstOrDefaultAsync(x => x.Telephone == user.Telephone) is not null)
+            {
+                ModelState.AddModelError("Telephone", "Account has been registered");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(user);
@@ -91,6 +96,11 @@ namespace GarageCooperative.Controllers
             if (id != user.UserId)
             {
                 return NotFound();
+            }
+
+            if (await _context.Users.FirstOrDefaultAsync(x => x.Telephone == user.Telephone && x.UserId != user.UserId) is not null)
+            {
+                ModelState.AddModelError("Telephone", "Account has been registered");
             }
 
             if (ModelState.IsValid)

@@ -152,6 +152,16 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
 
+            Membership DbMembership = await _context.Memberships.FirstOrDefaultAsync(x => x.GarageId == membership.GarageId
+                && x.MembershipId != membership.MembershipId);
+            if (DbMembership is not null)
+            {
+                if (DbMembership.OwnEnd.Value.Year == 1 || DbMembership.OwnEnd >= DateTime.Now)
+                {
+                    ModelState.AddModelError("GarageId", "You can't add owner for this garage");
+                }
+            }
+
             if (ModelState.IsValid)
             {
                 try

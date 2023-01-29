@@ -56,6 +56,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RoleId,Name,HasSalary")] Role role)
         {
+            if (await _context.Roles.FirstOrDefaultAsync(x => x.Name == role.Name) is not null)
+            {
+                ModelState.AddModelError("Name", "Role already taken");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(role);
@@ -91,6 +96,11 @@ namespace GarageCooperative.Controllers
             if (id != role.RoleId)
             {
                 return NotFound();
+            }
+
+            if (await _context.Roles.FirstOrDefaultAsync(x => x.Name == role.Name && x.RoleId != role.RoleId) is not null)
+            {
+                ModelState.AddModelError("Name", "Role already taken");
             }
 
             if (ModelState.IsValid)

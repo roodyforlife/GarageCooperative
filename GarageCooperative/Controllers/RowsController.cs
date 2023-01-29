@@ -111,6 +111,11 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
+            if (await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber && r.RowId != row.RowId) is not null)
+            {
+                ModelState.AddModelError("RowNumber", "Row number is already in the database");
+            }
+
 
             if (ModelState.IsValid)
             {

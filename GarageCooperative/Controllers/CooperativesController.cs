@@ -56,6 +56,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("CooperativeId,Name,Address,PostCode,Telephone")] Cooperative cooperative)
         {
+            if (await _context.Cooperatives.FirstOrDefaultAsync(x => x.Name == cooperative.Name) is not null)
+            {
+                ModelState.AddModelError("Name", "Cooperative has been registered");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(cooperative);
@@ -91,6 +96,11 @@ namespace GarageCooperative.Controllers
             if (id != cooperative.CooperativeId)
             {
                 return NotFound();
+            }
+
+            if (await _context.Cooperatives.FirstOrDefaultAsync(x => x.Name == cooperative.Name && x.CooperativeId != cooperative.CooperativeId) is not null)
+            {
+                ModelState.AddModelError("Name", "Cooperative has been registered");
             }
 
             if (ModelState.IsValid)

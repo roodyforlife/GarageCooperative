@@ -37,6 +37,9 @@ namespace GarageCooperative.Controllers
             var garage = await _context.Garages
                 .Include(g => g.Row)
                 .Include(g => g.Type)
+                .Include(x => x.Fees)
+                .Include(x => x.Memberships)
+                .ThenInclude(x => x.User)
                 .FirstOrDefaultAsync(m => m.GarageId == id);
             if (garage == null)
             {
@@ -61,6 +64,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("GarageId,Number,GarageSpace,CarsCapacity,RowId,TypeId")] Garage garage)
         {
+            if (await _context.Garages.Include(x => x.Row).FirstOrDefaultAsync(x => x.Number == garage.Number && x.Row.RowId == garage.RowId) is not null)
+            {
+                ModelState.AddModelError("Number", "Garage already registered");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(garage);
@@ -100,6 +108,12 @@ namespace GarageCooperative.Controllers
             if (id != garage.GarageId)
             {
                 return NotFound();
+            }
+
+            if (await _context.Garages.Include(x => x.Row).FirstOrDefaultAsync(x => x.Number == garage.Number
+                && x.Row.RowId == garage.RowId && x.GarageId != garage.GarageId) is not null)
+            {
+                ModelState.AddModelError("Number", "Garage already registered");
             }
 
             if (ModelState.IsValid)
