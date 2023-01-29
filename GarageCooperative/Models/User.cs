@@ -29,7 +29,8 @@ namespace GarageCooperative.Models
         [StringLength(50, MinimumLength = 2, ErrorMessage = "Field entered incorrectly")]
         public string Address { get; set; }
         public int Salary { get; set; }
-        public List<UserRole> UserRoles { get; set; }
+        public Role Role { get; set; }
+        public int RoleId { get; set; }
         public List<Membership> Memberships { get; set; }
     }
 }

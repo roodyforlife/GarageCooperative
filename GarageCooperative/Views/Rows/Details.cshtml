@@ -10,22 +10,22 @@
     <h4>Row</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.RowNumber)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.RowNumber)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.MaxGarageCount)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.MaxGarageCount)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Cooperative)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Cooperative.CooperativeId)
         </dd>
     </dl>
@@ -34,3 +34,43 @@
     <a asp-action="Edit" asp-route-id="@Model.RowId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+<h4>Garages</h4>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Garages.First().Number)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Garages.First().GarageSpace)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Garages.First().CarsCapacity)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Garages.First().Row)
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Garages)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Number)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GarageSpace)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CarsCapacity)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Row.RowId)
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

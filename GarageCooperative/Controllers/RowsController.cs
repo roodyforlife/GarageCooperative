@@ -36,6 +36,7 @@ namespace GarageCooperative.Controllers
 
             var row = await _context.Rows
                 .Include(r => r.Cooperative)
+                .Include(r => r.Garages)
                 .FirstOrDefaultAsync(m => m.RowId == id);
             if (row == null)
             {
