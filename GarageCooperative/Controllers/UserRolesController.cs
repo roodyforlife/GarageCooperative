@@ -61,6 +61,12 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("UserRoleId,UserId,RoleId")] UserRole userRole)
         {
+            UserRole DbUserRole = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == userRole.UserId && x.RoleId == userRole.RoleId);
+            if (DbUserRole is not null)
+            {
+                ModelState.AddModelError("UserId", "User already has this role");
+            }
+
             if (ModelState.IsValid)
             {
                 _context.Add(userRole);
@@ -101,6 +107,13 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
+
+            UserRole DbUserRole = await _context.UserRoles.FirstOrDefaultAsync(x => x.UserId == userRole.UserId && x.RoleId == userRole.RoleId);
+            if (DbUserRole is not null)
+            {
+                ModelState.AddModelError("UserId", "User already has this role");
+            }
+
 
             if (ModelState.IsValid)
             {

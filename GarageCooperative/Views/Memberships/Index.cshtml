@@ -19,6 +19,9 @@
                 @Html.DisplayNameFor(model => model.User)
             </th>
             <th>
+                User phone
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.OwnStart)
             </th>
             <th>
@@ -31,10 +34,13 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Garage.GarageId)
+                @Html.DisplayFor(modelItem => item.Garage.Number)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.User.UserId)
+                @item.User.Surname @item.User.Name @item.User.Lastname
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User.Telephone)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OwnStart)

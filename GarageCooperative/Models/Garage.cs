@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -16,7 +17,8 @@ namespace GarageCooperative.Models
         public Row Row { get; set; }
         public int RowId { get; set; }
         public Type Type { get; set; }
-        public int TypeId { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        public int? TypeId { get; set; }
         public List<Membership> Memberships { get; set; }
         public List<Fee> Fees { get; set; }
     }

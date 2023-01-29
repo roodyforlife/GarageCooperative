@@ -27,7 +27,8 @@ namespace GarageCooperative.DataBase
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=GarageCooperative;Trusted_Connection=True;");
+            // optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=GarageCooperative;Trusted_Connection=True;");
+            optionsBuilder.UseSqlServer("Server=DESKTOP-KIV92L3;Database=GarageCooperative;Trusted_Connection=True;Encrypt=False;");
         }
     }
 }
