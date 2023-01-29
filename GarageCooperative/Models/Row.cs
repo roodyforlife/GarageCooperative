@@ -10,5 +10,8 @@ namespace GarageCooperative.Models
         public int RowId { get; set; }
         public int RowNumber { get; set; }
         public int MaxGarageCount { get; set; }
+        public Cooperative Cooperative { get; set; }
+        public int CooperativeId { get; set; }
+        public List<Garage> Garages { get; set; }
     }
 }

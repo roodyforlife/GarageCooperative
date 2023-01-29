@@ -16,5 +16,7 @@ namespace GarageCooperative.Models
         public string PassportNumber { get; set; }
         public string Address { get; set; }
         public int Salary { get; set; }
+        public List<UserRole> UserRoles { get; set; }
+        public List<Membership> Memberships { get; set; }
     }
 }

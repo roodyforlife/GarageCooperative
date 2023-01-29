@@ -12,5 +12,6 @@ namespace GarageCooperative.Models
         public string Address { get; set; }
         public string PostCode { get; set; }
         public string Telephone { get; set; }
+        public List<Row> Rows { get; set; }
     }
 }

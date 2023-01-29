@@ -13,5 +13,6 @@ namespace GarageCooperative.Models
         public int GarbadgeCost { get; set; }
         public int WaterCost { get; set; }
         public int FloorNumber { get; set; }
+        public List<TypeGarage> TypeGarages { get; set; }
     }
 }

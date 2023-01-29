@@ -10,5 +10,6 @@ namespace GarageCooperative.Models
         public int RoleId { get; set; }
         public string Name { get; set; }
         public bool HasSalary { get; set; }
+        public List<UserRole> UserRoles { get; set; }
     }
 }
