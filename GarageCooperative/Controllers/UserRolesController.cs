@@ -10,23 +10,23 @@ using GarageCooperative.Models;
 
 namespace GarageCooperative.Controllers
 {
-    public class TypeGaragesController : Controller
+    public class UserRolesController : Controller
     {
         private readonly DataBaseContext _context;
 
-        public TypeGaragesController(DataBaseContext context)
+        public UserRolesController(DataBaseContext context)
         {
             _context = context;
         }
 
-        // GET: TypeGarages
+        // GET: UserRoles
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.TypeGarages.Include(t => t.Garage).Include(t => t.Type);
+            var dataBaseContext = _context.UserRoles.Include(u => u.Role).Include(u => u.User);
             return View(await dataBaseContext.ToListAsync());
         }
 
-        // GET: TypeGarages/Details/5
+        // GET: UserRoles/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,45 +34,45 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
 
-            var typeGarage = await _context.TypeGarages
-                .Include(t => t.Garage)
-                .Include(t => t.Type)
-                .FirstOrDefaultAsync(m => m.TypeGarageId == id);
-            if (typeGarage == null)
+            var userRole = await _context.UserRoles
+                .Include(u => u.Role)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(m => m.UserRoleId == id);
+            if (userRole == null)
             {
                 return NotFound();
             }
 
-            return View(typeGarage);
+            return View(userRole);
         }
 
-        // GET: TypeGarages/Create
+        // GET: UserRoles/Create
         public IActionResult Create()
         {
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number");
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name");
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name");
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone");
             return View();
         }
 
-        // POST: TypeGarages/Create
+        // POST: UserRoles/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("TypeGarageId,GarageId,TypeId")] TypeGarage typeGarage)
+        public async Task<IActionResult> Create([Bind("UserRoleId,UserId,RoleId")] UserRole userRole)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(typeGarage);
+                _context.Add(userRole);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
-            return View(typeGarage);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
+            return View(userRole);
         }
 
-        // GET: TypeGarages/Edit/5
+        // GET: UserRoles/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -80,24 +80,24 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
 
-            var typeGarage = await _context.TypeGarages.FindAsync(id);
-            if (typeGarage == null)
+            var userRole = await _context.UserRoles.FindAsync(id);
+            if (userRole == null)
             {
                 return NotFound();
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
-            return View(typeGarage);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
+            return View(userRole);
         }
 
-        // POST: TypeGarages/Edit/5
+        // POST: UserRoles/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("TypeGarageId,GarageId,TypeId")] TypeGarage typeGarage)
+        public async Task<IActionResult> Edit(int id, [Bind("UserRoleId,UserId,RoleId")] UserRole userRole)
         {
-            if (id != typeGarage.TypeGarageId)
+            if (id != userRole.UserRoleId)
             {
                 return NotFound();
             }
@@ -106,12 +106,12 @@ namespace GarageCooperative.Controllers
             {
                 try
                 {
-                    _context.Update(typeGarage);
+                    _context.Update(userRole);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!TypeGarageExists(typeGarage.TypeGarageId))
+                    if (!UserRoleExists(userRole.UserRoleId))
                     {
                         return NotFound();
                     }
@@ -122,12 +122,12 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GarageId"] = new SelectList(_context.Garages, "GarageId", "Number", typeGarage.GarageId);
-            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", typeGarage.TypeId);
-            return View(typeGarage);
+            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", userRole.RoleId);
+            ViewData["UserId"] = new SelectList(_context.Users, "UserId", "Telephone", userRole.UserId);
+            return View(userRole);
         }
 
-        // GET: TypeGarages/Delete/5
+        // GET: UserRoles/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -135,32 +135,32 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
 
-            var typeGarage = await _context.TypeGarages
-                .Include(t => t.Garage)
-                .Include(t => t.Type)
-                .FirstOrDefaultAsync(m => m.TypeGarageId == id);
-            if (typeGarage == null)
+            var userRole = await _context.UserRoles
+                .Include(u => u.Role)
+                .Include(u => u.User)
+                .FirstOrDefaultAsync(m => m.UserRoleId == id);
+            if (userRole == null)
             {
                 return NotFound();
             }
 
-            return View(typeGarage);
+            return View(userRole);
         }
 
-        // POST: TypeGarages/Delete/5
+        // POST: UserRoles/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var typeGarage = await _context.TypeGarages.FindAsync(id);
-            _context.TypeGarages.Remove(typeGarage);
+            var userRole = await _context.UserRoles.FindAsync(id);
+            _context.UserRoles.Remove(userRole);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool TypeGarageExists(int id)
+        private bool UserRoleExists(int id)
         {
-            return _context.TypeGarages.Any(e => e.TypeGarageId == id);
+            return _context.UserRoles.Any(e => e.UserRoleId == id);
         }
     }
 }

@@ -20,6 +20,5 @@ namespace GarageCooperative.Models
         public int WaterCost { get; set; }
         [Required(ErrorMessage = "Should be not required")]
         public int FloorNumber { get; set; }
-        public List<TypeGarage> TypeGarages { get; set; }
     }
 }

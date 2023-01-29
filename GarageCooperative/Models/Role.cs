@@ -13,5 +13,6 @@ namespace GarageCooperative.Models
         [StringLength(30, MinimumLength = 2, ErrorMessage = "Field entered incorrectly")]
         public string Name { get; set; }
         public bool HasSalary { get; set; }
+        public List<UserRole> UserRoles { get; set; }
     }
 }

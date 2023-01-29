@@ -15,7 +15,8 @@ namespace GarageCooperative.Models
         public int CarsCapacity { get; set; }
         public Row Row { get; set; }
         public int RowId { get; set; }
-        public List<TypeGarage> TypeGarages { get; set; }
+        public Type Type { get; set; }
+        public int TypeId { get; set; }
         public List<Membership> Memberships { get; set; }
         public List<Fee> Fees { get; set; }
     }

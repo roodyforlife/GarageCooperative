@@ -22,8 +22,8 @@ namespace GarageCooperative.DataBase
         public DbSet<Role> Roles { get; set; }
         public DbSet<Row> Rows { get; set; }
         public DbSet<GarageCooperative.Models.Type> Types { get; set; }
-        public DbSet<TypeGarage> TypeGarages { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserRole> UserRoles { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

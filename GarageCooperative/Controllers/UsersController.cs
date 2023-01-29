@@ -22,8 +22,7 @@ namespace GarageCooperative.Controllers
         // GET: Users
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Users.Include(u => u.Role);
-            return View(await dataBaseContext.ToListAsync());
+            return View(await _context.Users.ToListAsync());
         }
 
         // GET: Users/Details/5
@@ -35,7 +34,6 @@ namespace GarageCooperative.Controllers
             }
 
             var user = await _context.Users
-                .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {
@@ -48,7 +46,6 @@ namespace GarageCooperative.Controllers
         // GET: Users/Create
         public IActionResult Create()
         {
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name");
             return View();
         }
 
@@ -57,7 +54,7 @@ namespace GarageCooperative.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("UserId,Name,Surname,Lastname,Telephone,Email,PassportNumber,Address,Salary,RoleId")] User user)
+        public async Task<IActionResult> Create([Bind("UserId,Name,Surname,Lastname,Telephone,Email,PassportNumber,Address,Salary")] User user)
         {
             if (ModelState.IsValid)
             {
@@ -65,7 +62,6 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", user.RoleId);
             return View(user);
         }
 
@@ -82,7 +78,6 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", user.RoleId);
             return View(user);
         }
 
@@ -91,7 +86,7 @@ namespace GarageCooperative.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("UserId,Name,Surname,Lastname,Telephone,Email,PassportNumber,Address,Salary,RoleId")] User user)
+        public async Task<IActionResult> Edit(int id, [Bind("UserId,Name,Surname,Lastname,Telephone,Email,PassportNumber,Address,Salary")] User user)
         {
             if (id != user.UserId)
             {
@@ -118,7 +113,6 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoleId"] = new SelectList(_context.Roles, "RoleId", "Name", user.RoleId);
             return View(user);
         }
 
@@ -131,7 +125,6 @@ namespace GarageCooperative.Controllers
             }
 
             var user = await _context.Users
-                .Include(u => u.Role)
                 .FirstOrDefaultAsync(m => m.UserId == id);
             if (user == null)
             {

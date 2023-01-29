@@ -22,7 +22,7 @@ namespace GarageCooperative.Controllers
         // GET: Garages
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Garages.Include(g => g.Row);
+            var dataBaseContext = _context.Garages.Include(g => g.Row).Include(g => g.Type);
             return View(await dataBaseContext.ToListAsync());
         }
 
@@ -36,6 +36,7 @@ namespace GarageCooperative.Controllers
 
             var garage = await _context.Garages
                 .Include(g => g.Row)
+                .Include(g => g.Type)
                 .FirstOrDefaultAsync(m => m.GarageId == id);
             if (garage == null)
             {
@@ -49,6 +50,7 @@ namespace GarageCooperative.Controllers
         public IActionResult Create()
         {
             ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber");
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name");
             return View();
         }
 
@@ -57,7 +59,7 @@ namespace GarageCooperative.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("GarageId,Number,GarageSpace,CarsCapacity,RowId")] Garage garage)
+        public async Task<IActionResult> Create([Bind("GarageId,Number,GarageSpace,CarsCapacity,RowId,TypeId")] Garage garage)
         {
             if (ModelState.IsValid)
             {
@@ -66,6 +68,7 @@ namespace GarageCooperative.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }
 
@@ -83,6 +86,7 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
             ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }
 
@@ -91,7 +95,7 @@ namespace GarageCooperative.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("GarageId,Number,GarageSpace,CarsCapacity,RowId")] Garage garage)
+        public async Task<IActionResult> Edit(int id, [Bind("GarageId,Number,GarageSpace,CarsCapacity,RowId,TypeId")] Garage garage)
         {
             if (id != garage.GarageId)
             {
@@ -119,6 +123,7 @@ namespace GarageCooperative.Controllers
                 return RedirectToAction(nameof(Index));
             }
             ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+            ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }
 
@@ -132,6 +137,7 @@ namespace GarageCooperative.Controllers
 
             var garage = await _context.Garages
                 .Include(g => g.Row)
+                .Include(g => g.Type)
                 .FirstOrDefaultAsync(m => m.GarageId == id);
             if (garage == null)
             {
