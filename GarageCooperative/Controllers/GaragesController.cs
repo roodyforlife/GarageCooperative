@@ -127,7 +127,18 @@ namespace GarageCooperative.Controllers
         // GET: Garages/Create
         public IActionResult Create()
         {
-            ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber");
+            var rows = _context.Rows.Include(x => x.Cooperative);
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Row row in rows)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = row.RowId.ToString(),
+                    Text = $"Row number: {row.RowNumber} (Cooperative: {row.Cooperative.Name})"
+                });
+            }
+
+            ViewData["RowId"] = new SelectList(selectListItems, "Value", "Text");
             ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name");
             return View();
         }
@@ -150,7 +161,19 @@ namespace GarageCooperative.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+
+            var rows = _context.Rows.Include(x => x.Cooperative);
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Row row in rows)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = row.RowId.ToString(),
+                    Text = $"Row number: {row.RowNumber} (Cooperative: {row.Cooperative.Name})"
+                });
+            }
+
+            ViewData["RowId"] = new SelectList(selectListItems, "Value", "Text", garage.RowId);
             ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }
@@ -168,7 +191,19 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+
+            var rows = _context.Rows.Include(x => x.Cooperative);
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Row row in rows)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = row.RowId.ToString(),
+                    Text = $"Row number: {row.RowNumber} (Cooperative: {row.Cooperative.Name})"
+                });
+            }
+
+            ViewData["RowId"] = new SelectList(selectListItems, "Value", "Text", garage.RowId);
             ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }
@@ -211,7 +246,19 @@ namespace GarageCooperative.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RowId"] = new SelectList(_context.Rows, "RowId", "RowNumber", garage.RowId);
+
+            var rows = _context.Rows.Include(x => x.Cooperative);
+            List<SelectListItem> selectListItems = new List<SelectListItem>();
+            foreach (Row row in rows)
+            {
+                selectListItems.Add(new SelectListItem()
+                {
+                    Value = row.RowId.ToString(),
+                    Text = $"Row number: {row.RowNumber} (Cooperative: {row.Cooperative.Name})"
+                });
+            }
+
+            ViewData["RowId"] = new SelectList(selectListItems, "Value", "Text", garage.RowId);
             ViewData["TypeId"] = new SelectList(_context.Types, "TypeId", "Name", garage.TypeId);
             return View(garage);
         }

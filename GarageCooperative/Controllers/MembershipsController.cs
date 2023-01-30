@@ -120,14 +120,14 @@ namespace GarageCooperative.Controllers
         // GET: Memberships/Create
         public IActionResult Create()
         {
-            var garages = _context.Garages.Include(x => x.Row).ToList();
+            var garages = _context.Garages.Include(x => x.Row).ThenInclude(x => x.Cooperative).ToList();
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             foreach (Garage garage in garages)
             {
                 selectListItems.Add(new SelectListItem()
                 {
                     Value = garage.GarageId.ToString(),
-                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber} - {garage.Row.Cooperative.Name})"
                 });
             }
 
@@ -165,14 +165,14 @@ namespace GarageCooperative.Controllers
             
             }
 
-            var garages = _context.Garages.Include(x => x.Row).ToList();
+            var garages = _context.Garages.Include(x => x.Row).ThenInclude(x => x.Cooperative).ToList();
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             foreach (Garage garage in garages)
             {
                 selectListItems.Add(new SelectListItem()
                 {
                     Value = garage.GarageId.ToString(),
-                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber} - {garage.Row.Cooperative.Name})"
                 });
             }
 
@@ -195,14 +195,14 @@ namespace GarageCooperative.Controllers
                 return NotFound();
             }
 
-            var garages = _context.Garages.Include(x => x.Row).ToList();
+            var garages = _context.Garages.Include(x => x.Row).ThenInclude(x => x.Cooperative).ToList();
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             foreach (Garage garage in garages)
             {
                 selectListItems.Add(new SelectListItem()
                 {
                     Value = garage.GarageId.ToString(),
-                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber} - {garage.Row.Cooperative.Name})"
                 });
             }
 
@@ -227,6 +227,11 @@ namespace GarageCooperative.Controllers
                 && x.MembershipId != membership.MembershipId);
             if (DbMembership is not null)
             {
+                if (membership.OwnEnd is null)
+                {
+                    membership.OwnEnd = new DateTime();
+                }
+
                 if (DbMembership.OwnEnd.Value.Year == 1 || DbMembership.OwnEnd >= DateTime.Now)
                 {
                     ModelState.AddModelError("GarageId", "You can't add owner for this garage");
@@ -254,14 +259,14 @@ namespace GarageCooperative.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            var garages = _context.Garages.Include(x => x.Row).ToList();
+            var garages = _context.Garages.Include(x => x.Row).ThenInclude(x => x.Cooperative).ToList();
             List<SelectListItem> selectListItems = new List<SelectListItem>();
             foreach (Garage garage in garages)
             {
                 selectListItems.Add(new SelectListItem()
                 {
                     Value = garage.GarageId.ToString(),
-                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber})"
+                    Text = $"Garage number: {garage.Number} (Row: {garage.Row.RowNumber} - {garage.Row.Cooperative.Name})"
                 });
             }
 
