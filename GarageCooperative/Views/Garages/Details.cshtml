@@ -9,118 +9,125 @@
 <div>
     <h4>Garage</h4>
     <hr />
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Number)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Number)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.GarageSpace)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.GarageSpace)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.CarsCapacity)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.CarsCapacity)
-        </dd>
-        <dt class="col-sm-2">
-            Row number
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Row.RowNumber)
-        </dd>
-        <dt class="col-sm-2">
-            Cooperative Name
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Row.Cooperative.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Type.Name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Type.Cost)
-        </dt>
-        <dd class="col-sm-10">
-            @if (Model.Type is not null)
+
+    <div class="form-group">
+        <button onclick="createPDF(`Garage №@Model.Number (Row: @Model.Row.RowNumber) - @Model.Row.Cooperative.Name`)" class="btn btn-primary">Print</button>
+    </div>
+    <div id="print">
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Number)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Number)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.GarageSpace)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.GarageSpace)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CarsCapacity)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CarsCapacity)
+            </dd>
+            <dt class="col-sm-2">
+                Row number
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Row.RowNumber)
+            </dd>
+            <dt class="col-sm-2">
+                Cooperative Name
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Row.Cooperative.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Type)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Type.Name)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Type.Cost)
+            </dt>
+            <dd class="col-sm-10">
+                @if (Model.Type is not null)
+                {
+                    @(Model.Type.Cost + Model.Type.GarbadgeCost + Model.Type.WaterCost)
+                }
+                else
+                {
+                    @:null
+                }
+            </dd>
+            @{ var membership = Model.Memberships.FirstOrDefault(x => x.OwnEnd.Value.Year == 1);}
+            @if (membership is not null)
             {
-                @(Model.Type.Cost + Model.Type.GarbadgeCost + Model.Type.WaterCost)
+                <dt class="col-sm-2">
+                    Owner
+                </dt>
+                <dd class="col-sm-10">
+                    @membership.User.Surname @membership.User.Name @membership.User.Lastname (@membership.User.Telephone)
+                </dd>
+                <dt class="col-sm-2">
+                    Days in owner
+                </dt>
+                <dd class="col-sm-10">
+                    @(DateTime.Now.Subtract(membership.OwnStart).Days)
+                </dd>
             }
             else
             {
-                @:null
+                <dt class="col-sm-2">
+                    Owner
+                </dt>
+                <dd class="col-sm-10">
+                    No owner
+                </dd>
             }
-        </dd>
-        @{ var membership = Model.Memberships.FirstOrDefault(x => x.OwnEnd.Value.Year == 1);}
-        @if (membership is not null)
-        {
-            <dt class="col-sm-2">
-                Owner
-            </dt>
-            <dd class="col-sm-10">
-                @membership.User.Surname @membership.User.Name @membership.User.Lastname (@membership.User.Telephone)
-            </dd>
-            <dt class="col-sm-2">
-                Days in owner
-            </dt>
-            <dd class="col-sm-10">
-                @(DateTime.Now.Subtract(membership.OwnStart).Days)
-            </dd>
-        }
-        else
-        {
-            <dt class="col-sm-2">
-                Owner
-            </dt>
-            <dd class="col-sm-10">
-                No owner
-            </dd>
-        }
-    </dl>
-</div>
-<div>
-    <a asp-action="Edit" asp-route-id="@Model.GarageId">Edit</a> |
-    <a asp-action="Index">Back to List</a>
-</div>
+        </dl>
+        <div class="createPdfBlock">
+            <a asp-action="Edit" asp-route-id="@Model.GarageId">Edit</a> |
+            <a asp-action="Index">Back to List</a>
+        </div>
 
-<h4>Fees</h4>
+        <h4>Fees</h4>
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Fees.First().Garage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fees.First().Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Fees.First().Payment)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model.Fees)
-        {
-            <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Garage.Number)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Date)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Payment)
-                </td>
-            </tr>
-        }
-    </tbody>
-</table>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fees.First().Garage)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fees.First().Date)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Fees.First().Payment)
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Fees)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Garage.Number)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Date)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Payment)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+</div>

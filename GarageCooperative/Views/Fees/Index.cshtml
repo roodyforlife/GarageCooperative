@@ -9,39 +9,59 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Garage)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Date)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Payment)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Garage.Number)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Date)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Payment)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FeeId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.FeeId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.FeeId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+
+<div class="form-group">
+    <button onclick="createPDF('Fees')" class="btn btn-primary">Print</button>
+</div>
+
+<div id="print">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Garage)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Garage.Row)
+                </th>
+                <th>
+                    Cooperative name
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Date)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Payment)
+                </th>
+                <th class="createPdfBlock"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Garage.Number)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Garage.Row.RowNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Garage.Row.Cooperative.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Date)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Payment)
+                </td>
+                <td class="createPdfBlock">
+                    <a asp-action="Edit" asp-route-id="@item.FeeId">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.FeeId">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.FeeId">Delete</a>
+                </td>
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>

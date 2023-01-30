@@ -34,6 +34,7 @@ namespace GarageCooperative.Controllers
             }
 
             var cooperative = await _context.Cooperatives
+                .Include(x => x.Rows)
                 .FirstOrDefaultAsync(m => m.CooperativeId == id);
             if (cooperative == null)
             {

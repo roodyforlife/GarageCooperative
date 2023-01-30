@@ -70,7 +70,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Garage.Number)
+                @Html.DisplayFor(modelItem => item.Garage.Number) (Row: @item.Garage.Row.RowNumber - @item.Garage.Row.Cooperative.Name)
             </td>
             <td>
                 @item.User.Surname @item.User.Name @item.User.Lastname

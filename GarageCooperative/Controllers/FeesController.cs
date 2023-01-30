@@ -22,7 +22,10 @@ namespace GarageCooperative.Controllers
         // GET: Fees
         public async Task<IActionResult> Index()
         {
-            var dataBaseContext = _context.Fees.Include(f => f.Garage);
+            var dataBaseContext = _context.Fees
+                .Include(f => f.Garage)
+                .ThenInclude(x => x.Row)
+                .ThenInclude(x => x.Cooperative);
             return View(await dataBaseContext.ToListAsync());
         }
 
@@ -36,6 +39,8 @@ namespace GarageCooperative.Controllers
 
             var fee = await _context.Fees
                 .Include(f => f.Garage)
+                .ThenInclude(x => x.Row)
+                .ThenInclude(x => x.Cooperative)
                 .FirstOrDefaultAsync(m => m.FeeId == id);
             if (fee == null)
             {

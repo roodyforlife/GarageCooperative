@@ -24,7 +24,10 @@ namespace GarageCooperative.Controllers
         public async Task<IActionResult> Index(int garageNumber, string userName, string userPhone,
             DateTime ownStartFrom, DateTime ownStartTo, MembershipSort sort = MembershipSort.GarageNumberAsc)
         {
-            IQueryable<Membership> dataBaseContext = _context.Memberships.Include(m => m.Garage).Include(m => m.User);
+            IQueryable<Membership> dataBaseContext = _context.Memberships.Include(m => m.Garage)
+                .ThenInclude(x => x.Row)
+                .ThenInclude(x => x.Cooperative)
+                .Include(m => m.User);
 
             if (garageNumber != 0)
             {

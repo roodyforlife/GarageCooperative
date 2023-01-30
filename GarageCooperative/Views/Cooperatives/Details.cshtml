@@ -10,28 +10,28 @@
     <h4>Cooperative</h4>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Name)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Name)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Address)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Address)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.PostCode)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.PostCode)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
             @Html.DisplayNameFor(model => model.Telephone)
         </dt>
-        <dd class = "col-sm-10">
+        <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Telephone)
         </dd>
     </dl>
@@ -40,3 +40,43 @@
     <a asp-action="Edit" asp-route-id="@Model.CooperativeId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
+
+
+<h4>Rows</h4>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Rows.First().RowNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rows.First().MaxGarageCount)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Rows.First().Cooperative)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Rows)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.RowNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.MaxGarageCount)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Cooperative.Name)
+                </td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@item.RowId">Details</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
