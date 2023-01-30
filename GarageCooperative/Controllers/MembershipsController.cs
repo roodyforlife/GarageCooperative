@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GarageCooperative.DataBase;
 using GarageCooperative.Models;
+using GarageCooperative.Enums;
 
 namespace GarageCooperative.Controllers
 {
@@ -20,9 +21,76 @@ namespace GarageCooperative.Controllers
         }
 
         // GET: Memberships
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int garageNumber, string userName, string userPhone,
+            DateTime ownStartFrom, DateTime ownStartTo, MembershipSort sort = MembershipSort.GarageNumberAsc)
         {
-            var dataBaseContext = _context.Memberships.Include(m => m.Garage).Include(m => m.User);
+            IQueryable<Membership> dataBaseContext = _context.Memberships.Include(m => m.Garage).Include(m => m.User);
+
+            if (garageNumber != 0)
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.Garage.Number == garageNumber);
+            }
+
+            if (!String.IsNullOrEmpty(userName))
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.User.Name.Contains(userName) || x.User.Surname.Contains(userName) ||
+                x.User.Lastname.Contains(userName));
+            }
+
+            if (!String.IsNullOrEmpty(userPhone))
+            {
+                dataBaseContext = dataBaseContext.Where(x => x.User.Telephone.Contains(userPhone));
+            }
+
+            if (ownStartTo.Year == 1)
+            {
+                ownStartTo = DateTime.Now.AddDays(1);
+            }
+
+            dataBaseContext = dataBaseContext.Where(x => x.OwnStart >= ownStartFrom);
+            dataBaseContext = dataBaseContext.Where(x => x.OwnStart <= ownStartTo);
+
+            switch (sort)
+            {
+                case MembershipSort.GarageNumberDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.Garage.Number);
+                    break;
+                case MembershipSort.UserNameAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.User.Name);
+                    break;
+                case MembershipSort.UserNameDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.User.Name);
+                    break;
+                case MembershipSort.UserPhoneAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.User.Telephone);
+                    break;
+                case MembershipSort.UserPhoneDesc:
+                    dataBaseContext = dataBaseContext.OrderByDescending(x => x.User.Telephone);
+                    break;
+                case MembershipSort.OwnStartAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.OwnStart);
+                    break;
+                case MembershipSort.OwnEndAsc:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.OwnEnd);
+                    break;
+                default:
+                    dataBaseContext = dataBaseContext.OrderBy(x => x.Garage.Number);
+                    break;
+            }
+
+            ViewBag.GarageNumber = garageNumber;
+            ViewBag.UserName = userName;
+            ViewBag.UserPhone = userPhone;
+            ViewBag.OwnStartFrom = ownStartFrom;
+            ViewBag.OwnStartTo = ownStartTo;
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(MembershipSort)).Cast<MembershipSort>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.ToString(),
+                   Value = x.ToString(),
+                   Selected = (x == sort)
+               }).ToList();
+
             return View(await dataBaseContext.ToListAsync());
         }
 

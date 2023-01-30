@@ -45,6 +45,23 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div class="form-group">
+    <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Garages.Number as 'Garage number', Rows.RowNumber, COUNT(Memberships.MembershipId) as 'Count of memberships', Cooperatives.Name as 'Cooperative name' from Garages
+left join Rows on Rows.RowId = Garages.RowId
+left join Memberships on Memberships.GarageId = Garages.GarageId
+left join Cooperatives on Cooperatives.CooperativeId = Rows.CooperativeId
+group by Garages.Number, Rows.RowNumber, Cooperatives.Name" asp-controller="Home">Запит на отримання гаражів (номеру гаражу, номер ряду, кілкьість власникиків, що були у даного гаража, назва кооперативу)</a>
+</div>
+
+<div class="form-group">
+    <a class="btn btn-primary" asp-action="Request" asp-route-request="Select gar.Number as 'Garage number', RowNumber, Sum(Payment) as 'Money paid', COUNT(Payment) as 'Count of paid' from Garages as gar
+left join Fees on Fees.GarageId = gar.GarageId
+left join Rows on Rows.RowId = gar.RowId
+left join Cooperatives on Cooperatives.CooperativeId = Rows.CooperativeId
+group by gar.Number, RowNumber, Cooperatives.Name, gar.GarageId" asp-controller="Home">Запит на отримання гаражів (номеру гаражу, номер ряду, сума оплачена за весь час за цей гараж та кількість оплат за гараж)</a>
+</div>
+
 <table class="table">
     <thead>
         <tr>
@@ -59,6 +76,9 @@
             </th>
             <th>
                 Row number
+            </th>
+            <th>
+                Cooperative Name
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Type)
@@ -80,6 +100,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Row.RowNumber)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Row.Cooperative.Name)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Type.Name)

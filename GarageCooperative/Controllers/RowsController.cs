@@ -60,7 +60,7 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("RowId,RowNumber,MaxGarageCount,CooperativeId")] Row row)
         {
-            if(await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber) is not null)
+            if(await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber && r.CooperativeId == row.CooperativeId) is not null)
             {
                 ModelState.AddModelError("RowNumber", "Row number is already in the database");
             }
@@ -72,7 +72,8 @@ namespace GarageCooperative.Controllers
                 List<Garage> garages = new List<Garage>();
                 for (int i = 1; i <= row.MaxGarageCount; i++)
                 {
-                    garages.Add(new Garage() { Number = i, Row = await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber) });
+                    garages.Add(new Garage() { Number = i, Row = await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber
+                        && r.Cooperative.CooperativeId == row.CooperativeId) });
                 }
 
                 await _context.Garages.AddRangeAsync(garages);
@@ -111,7 +112,8 @@ namespace GarageCooperative.Controllers
             {
                 return NotFound();
             }
-            if (await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber && r.RowId != row.RowId) is not null)
+            if (await _context.Rows.FirstOrDefaultAsync(r => r.RowNumber == row.RowNumber && r.RowId != row.RowId
+                && r.CooperativeId == row.CooperativeId) is not null)
             {
                 ModelState.AddModelError("RowNumber", "Row number is already in the database");
             }

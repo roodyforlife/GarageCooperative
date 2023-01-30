@@ -9,6 +9,15 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+
+<div class="form-group">
+    <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Cooperatives.Name as 'Cooperative name', Rows.RowNumber, AVG(Cast(Garages.GarageSpace as Float)) as 'average space of ​​garages in this row' from Rows
+left join Cooperatives on Cooperatives.CooperativeId = Rows.CooperativeId
+left join Garages on Garages.RowId = Rows.RowId
+group by Rows.RowNumber, Cooperatives.Name
+order by Cooperatives.Name" asp-controller="Home">Запит на отримання рядів, де буде виведено назву кооперативу, номер ряду та середню площу гаражу у ряді</a>
+</div>
+
 <table class="table">
     <thead>
         <tr>

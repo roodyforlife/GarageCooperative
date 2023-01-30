@@ -24,7 +24,7 @@ namespace GarageCooperative.Controllers
         public async Task<IActionResult> Index(int garageNumber, int rowNumber, int typeId, int garageSpaceFrom, int garageSpaceTo, 
             GarageSort sort = GarageSort.NumberAsc)
         {
-            IQueryable<Garage> dataBaseContext = _context.Garages.Include(g => g.Row).Include(g => g.Type);
+            IQueryable<Garage> dataBaseContext = _context.Garages.Include(g => g.Row).ThenInclude(x => x.Cooperative).Include(g => g.Type);
 
             if (garageNumber != 0)
             {
@@ -110,6 +110,7 @@ namespace GarageCooperative.Controllers
 
             var garage = await _context.Garages
                 .Include(g => g.Row)
+                .ThenInclude(x => x.Cooperative)
                 .Include(g => g.Type)
                 .Include(x => x.Fees)
                 .Include(x => x.Memberships)

@@ -6,6 +6,12 @@
 
 <h1>Index</h1>
 
+<div class="form-group">
+    <a class="btn btn-primary" asp-action="Request" asp-route-request="Select Types.Name, FloorNumber, (COUNT(Garages.GarageId) * (Types.Cost + Types.GarbadgeCost + Types.WaterCost)) as 'Money must be paid per month' from Types
+left join Garages on Garages.TypeId = Types.TypeId
+group by Types.Name, FloorNumber, Types.Cost, Types.GarbadgeCost, Types.WaterCost" asp-controller="Home">Запит на отримання типів гаражів, де буде виведено назву типу, кількість поверхів та кількість грошей, що буде виходити кожен місяць, зібравши оплату зі всіх гаражів</a>
+</div>
+
 <p>
     <a asp-action="Create">Create New</a>
 </p>

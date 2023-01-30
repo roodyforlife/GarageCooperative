@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using GarageCooperative.DataBase;
 using GarageCooperative.Models;
+using GarageCooperative.Enums;
 
 namespace GarageCooperative.Controllers
 {
@@ -20,9 +21,91 @@ namespace GarageCooperative.Controllers
         }
 
         // GET: Users
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string passportNumber, string userName, string userPhone, string email,
+            int salaryFrom, int salaryTo, UserSort sort = UserSort.SurnameAsc)
         {
-            return View(await _context.Users.ToListAsync());
+            IQueryable<User> users = _context.Users;
+
+            if (!String.IsNullOrEmpty(passportNumber))
+            {
+                users = users.Where(x => x.PassportNumber.Contains(passportNumber));
+            }
+
+            if (!String.IsNullOrEmpty(userName))
+            {
+                users = users.Where(x => x.Name.Contains(userName) || x.Surname.Contains(userName) || x.Lastname.Contains(userName));
+            }
+
+            if (!String.IsNullOrEmpty(userPhone))
+            {
+                users = users.Where(x => x.Telephone.Contains(userPhone));
+            }
+
+            if (!String.IsNullOrEmpty(email))
+            {
+                users = users.Where(x => x.Email.Contains(email));
+            }
+
+            if (salaryTo == 0 && users.Count() != 0)
+            {
+                salaryTo = users.Max(x => x.Salary);
+            }
+
+            users = users.Where(x => x.Salary >= salaryFrom);
+            users = users.Where(x => x.Salary <= salaryTo);
+
+            switch (sort)
+            {
+                case UserSort.NameAsc:
+                    users = users.OrderBy(x => x.Name);
+                    break;
+                case UserSort.NameDesc:
+                    users = users.OrderByDescending(x => x.Name);
+                    break;
+                case UserSort.SurnameDesc:
+                    users = users.OrderByDescending(x => x.Surname);
+                    break;
+                case UserSort.LastNameAsc:
+                    users = users.OrderBy(x => x.Lastname);
+                    break;
+                case UserSort.LastNameDesc:
+                    users = users.OrderByDescending(x => x.Lastname);
+                    break;
+                case UserSort.TelephoneAsc:
+                    users = users.OrderBy(x => x.Telephone);
+                    break;
+                case UserSort.EmailAsc:
+                    users = users.OrderBy(x => x.Email);
+                    break;
+                case UserSort.PasportNumberAsc:
+                    users = users.OrderBy(x => x.PassportNumber);
+                    break;
+                case UserSort.SalaryAsc:
+                    users = users.OrderBy(x => x.Salary);
+                    break;
+                case UserSort.SalaryDesc:
+                    users = users.OrderByDescending(x => x.Salary);
+                    break;
+                default:
+                    users = users.OrderBy(x => x.Surname);
+                    break;
+            }
+
+            ViewBag.PassportNumber = passportNumber;
+            ViewBag.UserName = userName;
+            ViewBag.UserPhone = userPhone;
+            ViewBag.Email = email;
+            ViewBag.SalaryFrom = salaryFrom;
+            ViewBag.SalaryTo = salaryTo;
+            ViewBag.Sort = (List<SelectListItem>)Enum.GetValues(typeof(UserSort)).Cast<UserSort>()
+               .Select(x => new SelectListItem
+               {
+                   Text = x.ToString(),
+                   Value = x.ToString(),
+                   Selected = (x == sort)
+               }).ToList();
+
+            return View(await users.ToListAsync());
         }
 
         // GET: Users/Details/5
