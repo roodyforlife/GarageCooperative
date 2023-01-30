@@ -143,13 +143,11 @@ namespace GarageCooperative.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("MembershipId,GarageId,UserId,OwnStart,OwnEnd")] Membership membership)
         {
-            Membership DbMembership = await _context.Memberships.FirstOrDefaultAsync(x => x.GarageId == membership.GarageId);
+            Membership DbMembership = await _context.Memberships.FirstOrDefaultAsync(x => x.GarageId == membership.GarageId
+                && x.OwnEnd.Value.Year == 1);
             if (DbMembership is not null)
             {
-                if (DbMembership.OwnEnd.Value.Year == 1 || DbMembership.OwnEnd >= DateTime.Now)
-                {
-                    ModelState.AddModelError("GarageId", "You can't add owner for this garage");
-                }
+                ModelState.AddModelError("GarageId", "You can't add owner for this garage");
             }
 
             if (membership.OwnEnd is null)
@@ -224,18 +222,15 @@ namespace GarageCooperative.Controllers
             }
 
             Membership DbMembership = await _context.Memberships.FirstOrDefaultAsync(x => x.GarageId == membership.GarageId
-                && x.MembershipId != membership.MembershipId);
+                && x.MembershipId != membership.MembershipId && x.OwnEnd.Value.Year == 1);
             if (DbMembership is not null)
             {
                 if (membership.OwnEnd is null)
                 {
                     membership.OwnEnd = new DateTime();
                 }
-
-                if (DbMembership.OwnEnd.Value.Year == 1 || DbMembership.OwnEnd >= DateTime.Now)
-                {
-                    ModelState.AddModelError("GarageId", "You can't add owner for this garage");
-                }
+                
+                ModelState.AddModelError("GarageId", "You can't add owner for this garage");
             }
 
             if (ModelState.IsValid)
