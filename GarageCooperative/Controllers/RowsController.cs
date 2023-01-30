@@ -69,6 +69,8 @@ namespace GarageCooperative.Controllers
             {
                 _context.Add(row);
                 await _context.SaveChangesAsync();
+
+                // Automation
                 List<Garage> garages = new List<Garage>();
                 for (int i = 1; i <= row.MaxGarageCount; i++)
                 {
